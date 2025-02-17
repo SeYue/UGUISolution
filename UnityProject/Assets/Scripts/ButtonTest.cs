@@ -1,25 +1,32 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 using UnityEngine.UI;
 
 public class ButtonTest : MonoBehaviour
 {
 	public Button Button;
+	delegate void ActionTest();
+	ActionTest at;
+
+	public AddMoneyEvent addMoneyEvent;
 
 	void Start()
 	{
-		Button.onClick.AddListener(() =>
-		{
-			Debug.Log("点击了按钮");
+		at = OnClick;
+		Debug.Log(at.Target);
+		Debug.Log(at.Method);
+		at.Method.Invoke(this, null);
+		Button.onClick.AddListener(OnClick);
+	}
 
-			using (new DisposeTest())
-			{
-				Debug.Log("using");
-			}
-		});
+	public void OnClick()
+	{
+		Debug.Log("点击了按钮");
+
+		using (new DisposeTest())
+		{
+			Debug.Log("using");
+		}
 	}
 }
 
